@@ -178,4 +178,26 @@ public class FuelCalculatorTest {
             calculator.calculateTotal(FuelType.RON95, 105.0f);
         });
     }
+    @Test
+    public void testCalculateTotal_ExceptionCoverage() {
+        FuelCalculator calculator = new FuelCalculator();
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculator.calculateTotal(FuelType.E5, -5f);
+        });
+        assertEquals("Số lít phải từ 0 đến 100.", exception.getMessage());
+    }
+    @Test
+    public void testCalculateTotal_VolumeBelowOrEqual50() {
+        FuelCalculator calculator = new FuelCalculator();
+
+        double result = calculator.calculateTotal(FuelType.E5, 30f);
+        assertEquals(675000.0, result, 0.001);
+    }
+    @Test
+    public void testCalculateTotal_VolumeAbove50_WithSurcharge() {
+        FuelCalculator calculator = new FuelCalculator();
+
+        double result = calculator.calculateTotal(FuelType.RON95, 60f);
+        assertEquals(1420000.0, result, 0.001);
+    }
 }
